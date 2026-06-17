@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 function Models() {
   const [models, setModels] = useState([]);
@@ -7,7 +7,7 @@ function Models() {
   const [formData, setFormData] = useState({ name: '', provider: 'openai', model_identifier: '' });
 
   const fetchModels = () => {
-    axios.get('http://localhost:8000/api/models')
+    api.get('/api/models')
       .then(res => setModels(res.data))
       .catch(err => console.error("Failed to fetch models", err));
   };
@@ -36,7 +36,7 @@ function Models() {
   const handleRegister = (e) => {
     e.preventDefault();
     const modelToRegister = PREDEFINED_MODELS[selectedModelIdx];
-    axios.post('http://localhost:8000/api/models', modelToRegister)
+    api.post('/api/models', modelToRegister)
       .then(() => {
         setShowModal(false);
         fetchModels();

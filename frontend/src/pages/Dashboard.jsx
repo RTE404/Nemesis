@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 function Dashboard() {
@@ -8,7 +8,7 @@ function Dashboard() {
   useEffect(() => {
     // In a real app we would fetch from the API.
     // We mock it temporarily if the backend isn't up, but here we try the real API.
-    axios.get('http://localhost:8000/api/dashboard')
+    api.get('/api/dashboard')
       .then(res => setStats(res.data))
       .catch(err => {
         console.error("Failed to fetch dashboard stats", err);

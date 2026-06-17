@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 function Campaigns() {
@@ -22,13 +22,13 @@ function Campaigns() {
   const availableCategories = ['prompt_injection', 'jailbreak', 'roleplay', 'system_extraction', 'context_manipulation'];
 
   const fetchCampaigns = () => {
-    axios.get('http://localhost:8000/api/campaigns')
+    api.get('/api/campaigns')
       .then(res => setCampaigns(res.data))
       .catch(err => console.error("Failed to fetch campaigns", err));
   };
 
   const fetchModels = () => {
-    axios.get('http://localhost:8000/api/models')
+    api.get('/api/models')
       .then(res => {
         setModels(res.data);
         if (res.data.length > 0) {
@@ -47,7 +47,7 @@ function Campaigns() {
     e.preventDefault();
     if (!formData.target_model_id) return alert("Please select a target model.");
     
-    axios.post('http://localhost:8000/api/campaigns', formData)
+    api.post('/api/campaigns', formData)
       .then(() => {
         setShowLaunchModal(false);
         fetchCampaigns();
@@ -67,7 +67,7 @@ function Campaigns() {
   };
 
   const viewReport = (campaignId, campaignName) => {
-    axios.get(`http://localhost:8000/api/campaigns/${campaignId}/metrics`)
+    api.get(`/api/campaigns/${campaignId}/metrics`)
       .then(res => {
         setReportData(res.data);
         setSelectedCampaignName(campaignName);
