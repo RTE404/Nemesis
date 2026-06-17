@@ -8,12 +8,12 @@ services:
     runtime: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
-    plan: free
+    # No plan field — defaults to free/starter tier
     envVars:
       - key: DATABASE_URL
         value: sqlite:///./data/redteam.db
       - key: GEMINI_API_KEY
-        sync: false   # You will paste this in the Render dashboard
+        sync: false   # Paste your key in the Render dashboard
 
   # ── Frontend (React/Vite → Static Site) ───────────────────────────
   - type: web
@@ -22,15 +22,11 @@ services:
     buildCommand: npm ci && npm run build
     staticPublishPath: ./dist
     rootDir: ./frontend
-    plan: free
+    # Static sites have no plan — they are always free
     routes:
       - type: rewrite
         source: /*
         destination: /index.html
     envVars:
       - key: VITE_API_URL
-        fromService:
-          type: web
-          name: nemesis-backend
-          property: host
-          format: https://{value}   # auto-fills with backend's Render URL
+        sync: false   # After backend deploys, paste its URL here (e.g. https://nemesis-backend.onrender.com)
